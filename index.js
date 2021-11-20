@@ -1,10 +1,12 @@
 const express=require("express");
-const app=express();
 const port=process.env.PORT || "8000";
 const cors=require("cors");
+const app=express();
+
+app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
 app.use('/',require("./routes"));
-app.use(cors);
 
 app.listen(port,function(err){
     if(err){

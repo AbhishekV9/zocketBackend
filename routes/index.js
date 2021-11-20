@@ -5,10 +5,11 @@ const router=express.Router();
 
 const userController=require("../controller/userController");
 
-router.get("/register",userController.RegisterUser);
-router.get('/success',function(req,res){
-    return res.json(200,{
-        message:"success"
+router.post("/register",userController.RegisterUser);
+router.get('/success/:id',function(req,res){
+    console.log(req.params.id);
+    return res.status(200).json({
+        message:"successsasasasasasa"
     })
 })
 
