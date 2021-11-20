@@ -1,3 +1,4 @@
+const User=require("../models/user");
 
 function ValidateEmail(input) {
     var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -17,10 +18,22 @@ module.exports.RegisterUser= async function(req,res){
             message:"Email Entered Is Not Valid"
         })
     }
-    return res.redirect(`/success/123`);
+    let user= await User.findOne({email:email});
+    if(user){
+        return res.status(200).json({
+            message:"User Already Registered",
+            user
+        })
+    }
 
+    user=await User.create(req.body);
+    return res.status(200).json({
+        message:"User Registered Successfully",
+        user
+    });
+    
    }catch(error){
-      console.log(err);
+      console.log(error);
       return res.json(500,{
           message:'Internal Server Error'
     });

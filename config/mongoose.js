@@ -1,6 +1,8 @@
 const mongoose=require("mongoose");
 
-const db=mongoose.connection();
+mongoose.connect('mongodb://localhost/Zocket');
+
+const db=mongoose.connection;
 
 db.on('error',console.error.bind('Error connecting to MongoDB'));
 

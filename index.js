@@ -3,6 +3,8 @@ const port=process.env.PORT || "8000";
 const cors=require("cors");
 const app=express();
 
+const db=require("./config/mongoose");
+
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
