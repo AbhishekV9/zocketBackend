@@ -23,38 +23,37 @@ function NotifyUser(message,user){
 
 module.exports.RegisterUser= async function(req,res){
    try{
-    let email=req.body.email;
-    let isValid=ValidateEmail(email);
-    if(!isValid){
-        return res.status(200).json({
-            notValid:true,
-            registered:false,
-            isPresent:false,
-            message:"Please Enter A Valid Email"
-        })
-    }
-    let user= await User.findOne({email:email});
-    if(user){
-        NotifyUser("User Already Registered",user);
+        let email=req.body.email;
+        let isValid=ValidateEmail(email);
+        if(!isValid){
+            return res.status(200).json({
+                notValid:true,
+                registered:false,
+                isPresent:false,
+                message:"Please Enter A Valid Email"
+            })
+        }
+        let user= await User.findOne({email:email});
+        if(user){
+            console.log(user.id);
+            NotifyUser("User Already Registered",user);
+            return res.status(200).json({
+                notValid:false,
+                registered:false,
+                isPresent:true,
+                message:"User Already Registered",
+                path:`http://localhost:8000/get_user/${user.id}`
+            })
+        }
+        user=await User.create(req.body);
+        NotifyUser("User Registered Successfully",user);
         return res.status(200).json({
             notValid:false,
-            registered:false,
-            isPresent:true,
-            message:"User Already Registered",
-            user
-        })
-    }
-
-    user=await User.create(req.body);
-    NotifyUser("User Registered Successfully",user);
-    return res.status(200).json({
-        notValid:false,
-        registered:true,
-        isPresent:false,
-        message:"User Registered Successfully",
-        user
-    });
-
+            registered:true,
+            isPresent:false,
+            message:"User Registered Successfully",
+            path:`http://localhost:8000/get_user/${user.id}`
+        });
    }catch(error){
       console.log(error);
       return res.json(500,{
@@ -63,4 +62,18 @@ module.exports.RegisterUser= async function(req,res){
    }
 }
 
+module.exports.SendUser=async function(req,res){
+    try{
+        const id=req.params.id;
+        const user=await User.findById(id);
+        return res.status(200).json({
+            user
+        });        
+    }catch(error){
+        console.log(error);
+        return res.status(500).json({
+            message:"Internal Server Error"
+        });
+    }
+}
 
