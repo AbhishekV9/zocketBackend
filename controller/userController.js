@@ -1,5 +1,7 @@
 const User=require("../models/user");
 
+const sendEmail =require("../utils/send-email");
+
 function ValidateEmail(input) {
     var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     if (input.match(validRegex)){
@@ -7,6 +9,16 @@ function ValidateEmail(input) {
     }else{
         return false;
     } 
+}
+
+function NotifyUser(message,user){
+    var mailOptions={
+        from:'highkiller999@gmail.com',
+        to:user.email,
+        subject:'Sending an Email using Node.js',
+        text:message
+    }
+    sendEmail(mailOptions);
 }
 
 module.exports.RegisterUser= async function(req,res){
@@ -23,6 +35,7 @@ module.exports.RegisterUser= async function(req,res){
     }
     let user= await User.findOne({email:email});
     if(user){
+        NotifyUser("User Already Registered",user);
         return res.status(200).json({
             notValid:false,
             registered:false,
@@ -33,6 +46,7 @@ module.exports.RegisterUser= async function(req,res){
     }
 
     user=await User.create(req.body);
+    NotifyUser("User Registered Successfully",user);
     return res.status(200).json({
         notValid:false,
         registered:true,
