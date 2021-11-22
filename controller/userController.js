@@ -41,7 +41,7 @@ module.exports.RegisterUser= async function(req,res){
                 registered:false,
                 isPresent:true,
                 message:"User Already Registered",
-                path:`http://localhost:8000/get_user/${user.id}`
+                path:`https://zocket99.herokuapp.com/get_user/${user.id}`
             })
         }
         user=await User.create(req.body);
