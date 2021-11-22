@@ -35,7 +35,6 @@ module.exports.RegisterUser= async function(req,res){
         }
         let user= await User.findOne({email:email});
         if(user){
-            console.log(user.id);
             NotifyUser("User Already Registered",user);
             return res.status(200).json({
                 notValid:false,
