@@ -1,5 +1,6 @@
 var nodemailer=require("nodemailer");
 
+//using nodemailer to send notification Email
 var transporter= nodemailer.createTransport({
     service:'gmail',
     auth:{

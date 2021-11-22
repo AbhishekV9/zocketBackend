@@ -2,6 +2,7 @@ const User=require("../models/user");
 
 const sendEmail =require("../utils/send-email");
 
+//Checking if the Email entered by user is in Email format or not
 function ValidateEmail(input) {
     var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     if (input.match(validRegex)){
@@ -11,6 +12,7 @@ function ValidateEmail(input) {
     } 
 }
 
+//sending notification to user
 function NotifyUser(message,user){
     var mailOptions={
         from:'highkiller999@gmail.com',
@@ -21,6 +23,10 @@ function NotifyUser(message,user){
     sendEmail(mailOptions);
 }
 
+//registering the user:- sending different response on the basis of different casses:-
+//case 1:- Email entered by user is not in Email Format
+//case2:-  Email already registered
+//case 3:- Email is not registered till yet
 module.exports.RegisterUser= async function(req,res){
    try{
         let email=req.body.email;
@@ -51,7 +57,7 @@ module.exports.RegisterUser= async function(req,res){
             registered:true,
             isPresent:false,
             message:"User Registered Successfully",
-            path:`http://localhost:8000/get_user/${user.id}`
+            path:`https://zocket99.herokuapp.com/get_user/${user.id}`
         });
    }catch(error){
       console.log(error);
@@ -61,6 +67,7 @@ module.exports.RegisterUser= async function(req,res){
    }
 }
 
+//fetching the user id from params and then finding user from database on the basis of id and then returning the user.
 module.exports.SendUser=async function(req,res){
     try{
         const id=req.params.id;
